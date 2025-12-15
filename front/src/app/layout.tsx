@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/layout/Navbar";
+import Navbar from "@/components/Navbar/Navbar";
 import { Footer } from "@/components/layout/Footer";
+
 
 const inter = Inter({
   variable: "--font-sans",
@@ -22,6 +23,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} antialiased min-h-screen flex flex-col`}>
+
+      {/* <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      > */}
         <Navbar />
         {children}
         <Footer />

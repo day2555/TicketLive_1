@@ -46,11 +46,11 @@ export default function LoginForm() {
 
   return (
     <form
-      className="w-full max-w-md bg-white rounded-xl shadow-md p-12 flex flex-col space-y-4"
+      className="w-full max-w-lg rounded-2xl bg-linear-to-b from-slate-900/70 to-slate-950/70 shadow-2xl shadow-black/40 ring-1 ring-white/10 p-10 md:p-12 flex flex-col gap-8 mb-9"
       onSubmit={formik.handleSubmit}
     >
-      <div className="flex flex-col space-y-2  text-black">
-        <label htmlFor="email">Correo electrónico</label>
+      <div className="form-div">
+        <label className="form-label" htmlFor="email">Correo electrónico</label>
         <input
           id="email"
           name="email"
@@ -59,16 +59,16 @@ export default function LoginForm() {
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+          className="form-input"
           placeholder="Inserta tu correo electrónico"
         />
         {formik.touched.email && formik.errors.email && (
-          <p className="text-red-600 text-sm">{formik.errors.email}</p>
+          <p className="form-error">{formik.errors.email}</p>
         )}
       </div>
 
-      <div className="flex flex-col space-y-2  text-black">
-        <label htmlFor="password">Contraseña</label>
+      <div className="form-div">
+        <label className="form-label" htmlFor="password">Contraseña</label>
         <input
           id="password"
           name="password"
@@ -77,18 +77,18 @@ export default function LoginForm() {
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+          className="form-input"
           placeholder="Inserta tu contraseña"
         />
         {formik.touched.password && formik.errors.password && (
-          <p className="text-red-600 text-sm">{formik.errors.password}</p>
+          <p className="form-error">{formik.errors.password}</p>
         )}
       </div>
 
       <button
         type="submit"
         disabled={formik.isSubmitting}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md px-3 py-2 mt-4 transition"
+        className="form-button"
       >
         {formik.isSubmitting ? "Iniciando sesión..." : "Inicia sesión"}
       </button>

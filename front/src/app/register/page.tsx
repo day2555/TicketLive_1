@@ -4,9 +4,16 @@ import Link from "next/link";
 export default function RegisterPage() {
   return (
     <div className="flex flex-col w-screen items-center justify-center px-4">
-      <h1 className="mt-5 mb-5 text-2xl font-bold">Crea tu cuenta de TicketLive</h1>
+      <h1 className="mt-5 mb-5 text-2xl font-bold">
+        Crea tu cuenta de TicketLive
+      </h1>
       <h2 className="text-xl mb-5 font-bold text-gray-500 text-center">
-        Descubre eventos y recibe alertas de tus artistas favoritos. Además descarga tus boletos de forma rápida y segura.
+        Descubre eventos y recibe alertas de tus artistas favoritos. Además
+        descarga tus boletos de forma rápida y segura.
+      </h2>
+      <RegisterForm />
+      <h2>O crea tu cuenta con {" "}
+        <Link className="text-blue-600 hover:underline" href={`${process.env.NEXT_PUBLIC_API_URL}auth/google/register`}>Google</Link>
       </h2>
       <h3 className="text-lg mb-9">
         ¿Ya tienes una cuenta de TicketLive?{" "}
@@ -14,7 +21,6 @@ export default function RegisterPage() {
           Ingresa
         </Link>
       </h3>
-      <RegisterForm />
     </div>
   );
 }

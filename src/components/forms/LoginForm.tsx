@@ -2,8 +2,8 @@
 
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
+
 
 import {
   LoginFormValuesType,
@@ -11,35 +11,35 @@ import {
   loginValidationSchema,
 } from "@/validators/loginSchema";
 
-import { loginUser } from "@/services/auth.service";
+import { useAuth } from "@/contexts/AuthContext";
+import Link from "next/link";
 
 export default function LoginForm() {
   const router = useRouter();
+  const { login } = useAuth(); // 🪝 Usamos el hook de autenticación
 
   const formik = useFormik<LoginFormValuesType>({
     initialValues: loginInitialValues,
     validationSchema: loginValidationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const response = await loginUser(values);
-        console.log("Login success:", response);
+        // Llamamos a la función login del contexto
+        await login(values);
 
-        Swal.fire({
-          title: "Inicio de sesión exitoso",
-          icon: "success",
-          draggable: true,
+        // Mostramos notificación de éxito
+        toast.success("¡Bienvenido de vuelta!", {
+          description: "Has iniciado sesión correctamente",
         });
 
         resetForm();
-        router.push("/");
+        router.push("/"); // Redirigimos al home
       } catch (error: unknown) {
+        // Manejo de errores
         const message =
-          error instanceof Error ? error.message : "Unsuccessful login";
+          error instanceof Error ? error.message : "Error al iniciar sesión";
 
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: message,
+        toast.error("Error al iniciar sesión", {
+          description: message,
         });
       }
     },

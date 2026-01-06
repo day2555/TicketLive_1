@@ -19,7 +19,7 @@ export default function CartPage() {
   const router = useRouter();
 
   const handleProceedToPayment = () => {
-    //TEMPORAL/ Luego esto se conecta a la pasarela de pagos
+    //TEMPORAL/ Luego esto se conecta a la pasarela de pagos cuando esté lista
     router.push("/checkout");
   };
 

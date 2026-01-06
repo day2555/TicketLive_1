@@ -31,7 +31,11 @@ export default function LoginForm() {
         });
 
         resetForm();
-        router.push("/");
+        
+        // Forzar recarga para actualizar navbar
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 500);
       } catch (error: unknown) {
         const message =
           error instanceof Error ? error.message : "Unsuccessful login";
@@ -98,7 +102,7 @@ export default function LoginForm() {
         {formik.isSubmitting ? "Iniciando sesión..." : "Inicia sesión"}
       </button>
 
-        {/* Google login option */}
+      {/* Google login option */}
       <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
@@ -111,7 +115,7 @@ export default function LoginForm() {
       </div>
       <Link
         className="mt-4 w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors shadow-s"
-        href={`${process.env.NEXT_PUBLIC_API_URL}auth/google/login`}
+        href="http://localhost:3000/auth/google"
       >
         <span className="font-medium">Inicia sesión con Google</span>
         <svg className="w-5 h-5" viewBox="0 0 24 24">

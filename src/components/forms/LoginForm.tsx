@@ -2,8 +2,7 @@
 
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 import {
   LoginFormValuesType,
@@ -11,35 +10,33 @@ import {
   loginValidationSchema,
 } from "@/validators/loginSchema";
 
-import { loginUser } from "@/services/auth.service";
+import { useAuth } from "@/contexts/AuthContext";
+import Link from "next/link";
 
 export default function LoginForm() {
   const router = useRouter();
+  const { login } = useAuth(); // 🪝 Usamos el hook de autenticación
 
   const formik = useFormik<LoginFormValuesType>({
     initialValues: loginInitialValues,
     validationSchema: loginValidationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const response = await loginUser(values);
-        console.log("Login success:", response);
+        await login(values);
 
-        Swal.fire({
-          title: "Inicio de sesión exitoso",
-          icon: "success",
-          draggable: true,
+        toast.success("¡Bienvenido de vuelta!", {
+          description: "Has iniciado sesión correctamente",
         });
 
         resetForm();
-        router.push("/");
+        router.push("/"); 
       } catch (error: unknown) {
-        const message =
-          error instanceof Error ? error.message : "Unsuccessful login";
 
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: message,
+        const message =
+          error instanceof Error ? error.message : "Error al iniciar sesión";
+
+        toast.error("Error al iniciar sesión", {
+          description: message,
         });
       }
     },
@@ -111,7 +108,7 @@ export default function LoginForm() {
       </div>
       <Link
         className="mt-4 w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors shadow-s"
-        href={`${process.env.NEXT_PUBLIC_API_URL}auth/google/login`}
+        href={`${process.env.NEXT_PUBLIC_API_URL}/auth/google/login`}
       >
         <span className="font-medium">Inicia sesión con Google</span>
         <svg className="w-5 h-5" viewBox="0 0 24 24">

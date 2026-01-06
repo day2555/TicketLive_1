@@ -1,65 +1,129 @@
 import { RegisterFormValuesType } from "@/validators/registerSchema";
 import { LoginFormValuesType } from "@/validators/loginSchema";
 
-// const API_URL = "http://localhost:3001";
 
-// export const registerUser = async (userData: RegisterFormValuesType) => {
-//   const response = await fetch(`${API_URL}/users/register`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(userData),
-//   });
-//   if (!response.ok) {
-//     const errorData = await response.json().catch(() => null);
-//     throw new Error(errorData?.message || "Registro fallido");
-//   }
-//   return response.json();
-// };
+const API_URL = process.env.NEXT_PUBLIC_API_URL ; //|| "http://localhost:3001"
 
-// export const loginUser = async (userData: LoginFormValuesType) => {
-//   const response = await fetch(`${API_URL}/users/login`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(userData),
-//   });
-//   if (!response.ok) {
-//     const errorData = await response.json().catch(() => null);
-//     throw new Error(errorData?.message || "Login fallido");
-//   }
-//   return response.json();
-// };
+export interface AuthResponse {
+  success: boolean;
+  message: string;
+  token?: string;
+  user?: {
+    id: string;
+    email: string;
+    name: string;
+    role: string;
+  };
+}
 
-/* MOCK DEL SERVICE REGISTER*/
-export const registerUser = async (userData: RegisterFormValuesType) => {
-  console.log("Mock register payload:", userData);
-  // Simulación del delay de backend
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        success: true,
-        message: "Usuario registrado correctamente",
-      });
-    }, 1000);
-  });
+
+/**** */
+export class AuthError extends Error {
+  status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+    this.name = "AuthError";
+  }
+}
+/**** */
+
+
+
+export interface ApiError {
+  message: string;
+  errors?: Record<string, string[]>;
+}
+
+
+export const registerUser = async (
+  userData: RegisterFormValuesType
+): Promise<AuthResponse> => {
+  try {
+    const response = await fetch(`${API_URL}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+      credentials: "include", 
+    });
+    const data = await response.json();
+
+
+    if (!response.ok) {
+      throw new Error(data?.message || "Error al registrar usuario");
+    }
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("Error de conexión con el servidor");
+  }
 };
 
-/* MOCK DEL SERVICE LOGIN*/
-export const loginUser = async (userData: LoginFormValuesType) => {
-  console.log("Mock login payload:", userData);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        success: true,
-        token: "mock-token",
-        user: {
-          email: userData.email,
-        },
-        message: "Login exitoso (mock)",
-      });
-    }, 1000);
-  });
+
+export const loginUser = async (
+  userData: LoginFormValuesType
+): Promise<AuthResponse> => {
+  try {
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+      credentials: "include", 
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.message || "Error al iniciar sesión");
+    }
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("Error de conexión con el servidor");
+  }
+};
+
+
+export const fetchUserProfile = async (): Promise<AuthResponse['user']> => {
+  try {
+    const response = await fetch(`${API_URL}/users/profile`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", 
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new AuthError(data?.message || "Error al obtener perfil", response.status);
+    }
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const logoutUser = async (): Promise<void> => {
+  try {
+    
+    await fetch(`${API_URL}/auth/logout`, {
+      method: "POST", 
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+  } catch (error) {
+    console.error("Error al cerrar sesión en servidor", error);
+  }
 };

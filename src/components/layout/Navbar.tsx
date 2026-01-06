@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Cambiar según estado real de autenticación
+  const { isLoggedIn, logout } = useAuth(); // 🪝 Usamos el estado real de autenticación
 
   return (
     <nav className="bg-zinc-900 bg-opacity-95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-purple-500 border-opacity-20">
@@ -88,13 +90,13 @@ export default function Navbar() {
                   </svg>
                 </button>
 
-                {/* Dashboard/Profile */}
-                <Link 
-                  href="/dashboard"
+                {/* Logout Button */}
+                <button
+                  onClick={logout}
                   className="text-white bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg font-medium transition-all duration-200"
                 >
-                  Dashboard
-                </Link>
+                  Cerrar sesión
+                </button>
               </>
             ) : (
               <>
@@ -192,13 +194,15 @@ export default function Navbar() {
                   >
                     ❤️ Mis Favoritos
                   </Link>
-                  <Link 
-                    href="/dashboard"
-                    className="block text-center text-white bg-purple-600 hover:bg-purple-700 px-4 py-3 rounded-lg font-medium transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full text-center text-white bg-purple-600 hover:bg-purple-700 px-4 py-3 rounded-lg font-medium transition-colors"
                   >
-                    Dashboard
-                  </Link>
+                    Cerrar sesión
+                  </button>
                 </>
               ) : (
                 <>

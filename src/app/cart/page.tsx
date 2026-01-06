@@ -31,7 +31,7 @@ export default function CartPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-            Tu carrito de compras
+            Carrito de compras
           </h1>
 
           {getItemCount() > 0 && (

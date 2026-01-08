@@ -3,28 +3,23 @@
 import { useCart } from "@/contexts/CartContext";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { getEvents } from "@/services/events.service";
+import IEvent from "@/interfaces/event.interface";
 
 export default function Events() {
   const { addToCart } = useCart();
-  const [events, setEvents] = useState([]);
-
-  const getEvents = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch events");
-    }
-
-    return res.json();
-  };
+  const [events, setEvents] = useState<IEvent[]>([]);
 
   useEffect(() => {
-    getEvents().then(setEvents).catch(console.error);
+    const fetchEvents = async () => {
+      try {
+        const fetchedEvents: IEvent[] = await getEvents();
+        setEvents(fetchedEvents);
+      } catch (error) {
+        alert(error);
+      }
+    };
+    fetchEvents();
   }, []);
 
   return (
@@ -42,7 +37,7 @@ export default function Events() {
               <div className="w-full h-48 mb-4 rounded-xl overflow-hidden bg-secondary">
                 <Image
                   src={event.imageUrl}
-                  alt={event.name}
+                  alt={event.title}
                   height={192}
                   width={314.672}
                 ></Image>
@@ -50,7 +45,7 @@ export default function Events() {
 
               {/* INFORMACIÓN */}
               <div className="mb-4">
-                <h2 className="text-lg font-semibold">{event.name}</h2>
+                <h2 className="text-lg font-semibold">{event.title}</h2>
                 <p className="text-sm text-muted-foreground mt-1">
                   {event.description}
                 </p>

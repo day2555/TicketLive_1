@@ -3,7 +3,7 @@ export default interface IEvent {
   title: string;
   description: string;
   date: Date;
-  time: string;
+  start_time: string;
   location: string;
   capacity: number;
   price: number;

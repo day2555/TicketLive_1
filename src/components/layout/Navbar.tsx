@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -78,22 +78,68 @@ export default function Navbar() {
               🛒 
             </Link>
           </div>
+          <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+            TicketLive
+          </span>
+        </Link>
+        
+        {/* Navigation Links */}
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+          <Link href="/" className="hover:text-white transition-colors">
+            Inicio
+          </Link>
+          <Link href="/eventos" className="hover:text-white transition-colors">
+            Eventos
+          </Link>
+          <Link href="/promociones" className="hover:text-white transition-colors">
+            Promociones
+          </Link>
+          <Link href="/como-funciona" className="hover:text-white transition-colors">
+            Cómo funciona
+          </Link>
+          <Link href="/testimonios" className="hover:text-white transition-colors">
+            Testimonios
+          </Link>
+        </div>
 
-          {/* Auth Section - Desktop */}
-          <div className="hidden md:flex items-center space-x-4">
-            {/* Search Icon */}
-            <button className="text-gray-300 hover:text-white transition-colors">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
+        {/* Right Section */}
+        <div className="flex items-center gap-4">
+          {/* Search Button */}
+          <button className="text-muted-foreground hover:text-white transition-colors">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
 
-            {isLoggedIn ? (
-              <>
-                {/* Wishlist/Favorites Icon */}
-                <button className="text-gray-300 hover:text-white transition-colors">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          {/* Auth Section */}
+          <div className="hidden sm:flex gap-3 items-center">
+            {isAuthenticated && user ? (
+              // Usuario autenticado - Mostrar menú de usuario
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                >
+                  {user.profile_photo ? (
+                    <img
+                      src={user.profile_photo}
+                      alt={user.name}
+                      className="w-9 h-9 rounded-full object-cover border-2 border-primary/50"
+                    />
+                  ) : (
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center">
+                      <span className="text-white font-semibold text-sm">
+                        {user.name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                  <svg
+                    className={`w-4 h-4 text-muted-foreground transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
 
@@ -106,6 +152,7 @@ export default function Navbar() {
                 </button>
               </>
             ) : (
+              // Usuario NO autenticado - Mostrar botones de login/registro
               <>
                 <Link
                   href="/login"
@@ -121,31 +168,6 @@ export default function Navbar() {
                 </Link>
               </>
             )}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg p-2"
-              aria-label="Abrir menú"
-            >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {isMenuOpen ? (
-                  <path d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
           </div>
         </div>
       </div>

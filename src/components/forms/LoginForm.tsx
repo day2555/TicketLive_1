@@ -95,7 +95,7 @@ export default function LoginForm() {
         {formik.isSubmitting ? "Iniciando sesión..." : "Inicia sesión"}
       </button>
 
-        {/* Google login option */}
+      {/* Google login option */}
       <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">

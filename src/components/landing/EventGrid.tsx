@@ -1,81 +1,41 @@
-import { useState } from 'react';
+"use client";
+
 import { EventCard } from './EventCard';
 import { Button } from '@/components/ui/Button';
+import { useEffect, useState } from 'react';
+import { getEvents } from '@/services/events.service';
+import IEvent from '@/interfaces/event.interface';
 
-const FEATURED_EVENTS = [
-  {
-    id: 1,
-    title: "Neon Nights Music Festival 2024",
-    date: "Dec 15, 2024 • 8:00 PM",
-    location: "Miami Arena, FL",
-    price: "$149",
-    image: "https://images.unsplash.com/photo-1616709062048-788acece6a51?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    category: "Festival"
-  },
-  {
-    id: 2,
-    title: "The Weekend: After Hours Tour",
-    date: "Jan 20, 2025 • 9:00 PM",
-    location: "SoFi Stadium, CA",
-    price: "$299",
-    image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=2670&auto=format&fit=crop",
-    category: "Concert"
-  },
-  {
-    id: 3,
-    title: "Championship Finals: Lakers vs Celtics",
-    date: "Feb 10, 2025 • 7:30 PM",
-    location: "Crypto.com Arena, CA",
-    price: "$450",
-    image: "https://images.unsplash.com/photo-1581049966083-210f169bc2b4?q=80&w=771&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    category: "Sports"
-  },
-    {
-    id: 4,
-    title: "Electric Dreams: Cyberpunk Opera",
-    date: "Mar 05, 2025 • 8:00 PM",
-    location: "Sydney Opera House",
-    price: "$120",
-    image: "https://images.unsplash.com/photo-1580809361436-42a7ec204889?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    category: "Theater"
-  },
-    {
-    id: 5,
-    title: "Global Tech Summit 2025",
-    date: "Apr 12, 2025 • 9:00 AM",
-    location: "Silicon Valley, CA",
-    price: "$599",
-    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2670&auto=format&fit=crop",
-    category: "Conference"
-  },
-    {
-    id: 6,
-    title: "Jazz in the Park",
-    date: "May 20, 2025 • 6:00 PM",
-    location: "Central Park, NY",
-    price: "Free",
-    image: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=2832&auto=format&fit=crop",
-    category: "Music"
-  }
-];
-
-const CATEGORIES = [
-  { key: "All", label: "Todos" },
-  { key: "Concert", label: "Conciertos" },
-  { key: "Festival", label: "Festivales" },
-  { key: "Sports", label: "Deportes" },
-  { key: "Theater", label: "Teatro" },
-  { key: "Conference", label: "Conferencias" },
-  { key: "Music", label: "Música" }
-];
+ const CATEGORIES = [
+   { key: "All", label: "Todos" },
+   { key: "87eb6f79-7fcf-4cdf-b7f0-736a1b002c63", label: "Conciertos" },
+   { key: "d2549a57-7969-4ac6-b43d-03a804793ddd", label: "Festivales" },
+   { key: "95588a2a-0b64-49ef-9c02-d8e66bb858cc", label: "Deportes" },
+   { key: "e3dbc0d0-ba32-4f65-8682-50bca56deed1", label: "Teatro" },
+   { key: "7ab38443-37b3-4343-94d3-4825b3af27a3", label: "Conferencias" },
+ ];
 
 export function EventGrid() {
   const [activeCategory, setActiveCategory] = useState("All");
-
+  const [events, setEvents] = useState<IEvent[]>([]);
+  
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const fetchedEvents: IEvent[] = await getEvents();
+        setEvents(fetchedEvents);
+        console.log("sample event:", fetchedEvents[0]);
+      } catch (error) {
+        alert(error);
+      }
+    };
+    fetchEvents();
+  }, []);
+  
   const filteredEvents = activeCategory === "All" 
-    ? FEATURED_EVENTS 
-    : FEATURED_EVENTS.filter(event => event.category === activeCategory);
-
+  ? events 
+  : events.filter(event => event.category === activeCategory);
+  
   return (
     <section className="py-24 relative">
       <div className="container px-4 md:px-6 mx-auto">
@@ -100,7 +60,7 @@ export function EventGrid() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredEvents.map((event) => (
+          {filteredEvents.map((event: IEvent) => (
             <EventCard
               key={event.id}
               {...event}

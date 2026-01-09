@@ -1,74 +1,129 @@
 import { RegisterFormValuesType } from "@/validators/registerSchema";
 import { LoginFormValuesType } from "@/validators/loginSchema";
 
-const API_URL = "http://localhost:3000";
 
-// ========================================
-// REGISTER USER
-// ========================================
-export const registerUser = async (userData: RegisterFormValuesType) => {
+const API_URL = process.env.NEXT_PUBLIC_API_URL ; //|| "http://localhost:3001"
+
+export interface AuthResponse {
+  success: boolean;
+  message: string;
+  token?: string;
+  user?: {
+    id: string;
+    email: string;
+    name: string;
+    role: string;
+  };
+}
+
+
+/**** */
+export class AuthError extends Error {
+  status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+    this.name = "AuthError";
+  }
+}
+/**** */
+
+
+
+export interface ApiError {
+  message: string;
+  errors?: Record<string, string[]>;
+}
+
+
+export const registerUser = async (
+  userData: RegisterFormValuesType
+): Promise<AuthResponse> => {
   try {
     const response = await fetch(`${API_URL}/auth/signup`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: userData.email,
-        password: userData.password,
-        confirmPassword: userData.confirmPassword,
-        name: userData.name,
-        phone: userData.phone,
-        address: userData.address,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+      credentials: "include", 
     });
+    const data = await response.json();
+
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      throw new Error(errorData?.message || "Error en el registro");
+      throw new Error(data?.message || "Error al registrar usuario");
     }
-
-    return await response.json();
-  } catch (error: unknown) {
-    throw new Error(error instanceof Error ? error.message : "Error en el registro");
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("Error de conexión con el servidor");
   }
 };
 
-// ========================================
-// LOGIN USER
-// ========================================
-export const loginUser = async (userData: LoginFormValuesType) => {
+
+export const loginUser = async (
+  userData: LoginFormValuesType
+): Promise<AuthResponse> => {
   try {
     const response = await fetch(`${API_URL}/auth/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
-      body: JSON.stringify({
-        email: userData.email,
-        password: userData.password,
-      }),
+      body: JSON.stringify(userData),
+      credentials: "include", 
     });
+    const data = await response.json();
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      throw new Error(errorData?.message || "Credenciales incorrectas");
-    }
-
-    const data = await response.json();
-    
-    // Extraer usuario de la respuesta
-    const user = data.user || data;
-    
-    // Guardar en localStorage
-    if (user && user.email) {
-      localStorage.setItem('ticketlive_user', JSON.stringify(user));
-      window.dispatchEvent(new Event('authChange'));
+      throw new Error(data?.message || "Error al iniciar sesión");
     }
 
     return data;
-  } catch (error: unknown) {
-    throw new Error(error instanceof Error ? error.message : "Error al iniciar sesión");
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("Error de conexión con el servidor");
+  }
+};
+
+
+export const fetchUserProfile = async (): Promise<AuthResponse['user']> => {
+  try {
+    const response = await fetch(`${API_URL}/users/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", 
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new AuthError(data?.message || "Error al obtener perfil", response.status);
+    }
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const logoutUser = async (): Promise<void> => {
+  try {
+    
+    await fetch(`${API_URL}/auth/signout`, {
+      method: "POST", 
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+  } catch (error) {
+    console.error("Error al cerrar sesión en servidor", error);
   }
 };

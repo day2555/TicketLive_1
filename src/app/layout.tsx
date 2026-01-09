@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { CartProvider } from "@/contexts/CartContext";
+import { Toaster } from "sonner";
 
 
 const inter = Inter({
@@ -23,14 +26,17 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} antialiased min-h-screen flex flex-col`}>
-
-      {/* <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      > */}
-        <Navbar />
-        {children}
-        <Footer />
+        {/* AuthProvider envuelve toda la app para proveer el contexto de autenticación */}
+        <AuthProvider>
+          <CartProvider>
+            <Navbar />
+            {children}
+            <Footer />
+            {/* Toaster para mostrar notificaciones en toda la app */}
+            <Toaster position="top-right" richColors />
+          </CartProvider>
+        </AuthProvider>
       </body>
-    </html>
+    </html >
   );
 }

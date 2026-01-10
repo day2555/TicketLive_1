@@ -24,7 +24,6 @@ export function EventGrid() {
       try {
         const fetchedEvents: IEvent[] = await getEvents();
         setEvents(fetchedEvents);
-        console.log("sample event:", fetchedEvents[0]);
       } catch (error) {
         alert(error);
       }

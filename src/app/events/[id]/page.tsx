@@ -3,11 +3,12 @@ import {
   dateFormatter,
   timeFormatter,
 } from "@/services/events.service";
-import { Button } from "@/components/ui/Button";
 import IEvent from "@/interfaces/event.interface";
 import { Calendar, MapPin, Ticket, User, Clock } from "lucide-react";
 import Image from "next/image";
 import AddToCartButton from "@/components/ui/AddToCart";
+import EventMap from "@/components/maps/EventMap";
+import { geocodeMapTiler } from "@/services/geocode.service";
 
 export default async function EventDetails({
   params,
@@ -19,6 +20,7 @@ export default async function EventDetails({
   const formattedDate = dateFormatter(event.date);
   const formattedStartTime = timeFormatter(event.start_time);
   const formattedEndTime = timeFormatter(event.end_time);
+  const coords = await geocodeMapTiler(event.location);
 
   return (
     <section className="min-h-screen px-4 md:px-6 py-10">
@@ -105,6 +107,13 @@ export default async function EventDetails({
                 <AddToCartButton Props={event} />
               </div>
             </div>
+      {coords && (
+        <div className="mt-8 space-y-4">
+          <h2 className="text-xl font-semibold text-white">Ubicación</h2>
+          <EventMap lat={coords.lat} lon={coords.lon} title={event.title} />
+          <p className="text-sm text-muted-foreground">{event.location}</p>
+        </div>
+      )}
           </aside>
         </div>
       </div>

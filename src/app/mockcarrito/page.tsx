@@ -2,6 +2,7 @@
 
 import { concertsMock } from "@/mocks/concerts.mock";
 import { useCart } from "@/contexts/CartContext";
+import IEvent from "@/interfaces/event.interface"
 
 export default function MockCartPage() {
   const { addToCart } = useCart();

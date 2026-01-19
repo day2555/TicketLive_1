@@ -45,7 +45,7 @@ export default function MockCartPage() {
                 </span>
 
                 <button
-                  onClick={() => addToCart(concert)}
+                  onClick={() => addToCart(concert as unknown as IEvent)}
                   className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium shadow-lg shadow-purple-500/40 hover:from-purple-700 hover:to-pink-700 transition"
                 >
                   Agregar al carrito

@@ -6,10 +6,10 @@ import { Footer } from "@/components/layout/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
-import { TicketsProvider } from "@/contexts/TIcketsContext"; // ⭐ NUEVO
+import { TicketsProvider } from "@/contexts/TIcketsContext";
 import { Toaster } from "sonner";
 import { ChatBot } from "@/components/ui/ChatBot";
-
+import { Suspense } from "react";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -23,24 +23,26 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} antialiased min-h-screen flex flex-col`}>
-        {/* AuthProvider envuelve toda la app para proveer el contexto de autenticación */}
+      <body
+        className={`${inter.variable} antialiased min-h-screen flex flex-col`}
+      >
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>
-              <TicketsProvider> {/* ⭐ AGREGADO */}
-                <Navbar />
-                {children}
-                <Footer />
-                {/* Toaster para mostrar notificaciones en toda la app */}
-                <Toaster position="top-right" richColors />
-                <ChatBot />
-              </TicketsProvider> {/* ⭐ AGREGADO */}
+              <TicketsProvider>
+                <Suspense fallback={null}>
+                  <Navbar />
+                  {children}
+                  <Footer />
+                  <Toaster position="top-right" richColors />
+                  <ChatBot />
+                </Suspense>
+              </TicketsProvider>
             </FavoritesProvider>
           </CartProvider>
         </AuthProvider>

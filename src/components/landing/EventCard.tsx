@@ -43,7 +43,7 @@ export function EventCard({
         <div className="absolute top-4 right-4 z-10">
           <FavoriteButton 
             event={{
-              id,
+              id: id.toString(),
               title,
               description,
               imageUrl,

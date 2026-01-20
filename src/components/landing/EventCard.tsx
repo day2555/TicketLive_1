@@ -16,7 +16,7 @@ interface FavoriteEvent {
   description: string;
   imageUrl: string;
   price: number;
-  date: Date;
+  date: string;
   location: string;
   category: string;
 }
@@ -46,7 +46,7 @@ export function EventCard({
     description,
     imageUrl,
     price,
-    date,
+    date: date.toISOString(),
     location,
     category: categoryId,
   };

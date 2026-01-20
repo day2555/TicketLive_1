@@ -18,7 +18,7 @@ interface FavoriteEvent {
   price: number;
   date: Date;
   location: string;
-  category: number;
+  category: string;
 }
 
 export function EventCard({

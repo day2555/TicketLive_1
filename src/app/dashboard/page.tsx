@@ -29,12 +29,18 @@ export default function DashboardPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    birthday: "",
+  const [formData, setFormData] = useState<{
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  birthday: string;
+  }>({
+  name: "",
+  email: "",
+  phone: "",
+  address: "",
+  birthday: "",
   });
 
   // Redirect si no está autenticado
@@ -52,7 +58,7 @@ export default function DashboardPage() {
         email: user.email || "",
         phone: user.phone || "",
         address: user.address || "",
-        birthday: user.birthday || "",
+        birthday: user.birthday ? user.birthday.toISOString().split("T")[0] : "",
       });
     }
   }, [user]);
@@ -131,7 +137,12 @@ export default function DashboardPage() {
 
       // Si todo es válido, guardar
       await updateUserProfile(user.id, formData);
-      updateUser(formData);
+      updateUser({
+      ...formData,
+      birthday: formData.birthday
+      ? new Date(formData.birthday)
+      : null,
+      });
 
       showSuccessMessage("¡Perfil actualizado!", "Tus datos se han guardado correctamente");
       setIsEditing(false);
@@ -386,7 +397,7 @@ export default function DashboardPage() {
                           email: user.email || "",
                           phone: user.phone || "",
                           address: user.address || "",
-                          birthday: user.birthday || "",
+                          birthday: user.birthday ? user.birthday.toISOString().split("T")[0] : "",
                         });
                       }}
                       disabled={isSaving}

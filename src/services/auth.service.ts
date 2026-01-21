@@ -1,6 +1,7 @@
 import { User, AuthResponse } from "@/interfaces/user.interface";
 import { LoginFormValuesType } from "@/validators/loginSchema";
 import { RegisterFormValuesType } from "@/validators/registerSchema";
+import { UpdateUserProfileDto } from "@/interfaces/update-user-profile.interface";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -123,7 +124,7 @@ export const logoutUser = async (): Promise<void> => {
  */
 export const updateUserProfile = async (
   userId: string,
-  userData: Partial<User>
+  userData: UpdateUserProfileDto
 ): Promise<User> => {
   const response = await fetch(`${API_URL}/users/${userId}`, {
     method: "PATCH",

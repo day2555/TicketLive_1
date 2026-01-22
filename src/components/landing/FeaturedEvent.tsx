@@ -1,9 +1,10 @@
 // import Image from 'next/image';
-// import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 // import { Calendar, MapPin, Star } from 'lucide-react';
 
-// export function FeaturedEvent() {
-//   return (
+export function FeaturedEvent() {
+  return null;
+//     (
 //     <section className="relative py-12 md:py-24 overflow-hidden">
 //       <div className="container mx-auto px-4 md:px-6 relative z-10">
 //         <div className="rounded-[3rem] relative overflow-hidden bg-black border border-white/10 shadow-2xl">
@@ -86,3 +87,4 @@
 //     </section>
 //   );
 // }
+}

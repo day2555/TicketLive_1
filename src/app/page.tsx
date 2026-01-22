@@ -2,7 +2,7 @@
 
 import { Hero } from "@/components/landing/Hero";
 import { EventGrid } from "@/components/landing/EventGrid";
-import { FeaturedEvent } from "@/components/landing/FeaturedEvent";
+// import { FeaturedEvent } from "@/components/landing/FeaturedEvent";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { toast } from "sonner";
@@ -34,7 +34,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col bg-background selection:bg-primary/30 selection:text-primary-foreground">
       <Hero />
-      <FeaturedEvent />
+      {/* <FeaturedEvent /> */}
       <EventGrid />
 
       <section className="py-24 border-t border-white/5 relative overflow-hidden">

@@ -51,7 +51,8 @@ export function EventGrid() {
   return (
     <section className="py-24 relative">
       <div className="container px-4 md:px-6 mx-auto">
-        <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-12 gap-6">
+
+        {/* <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-12 gap-6">
           <div className="space-y-2">
             <h2 className="text-3xl md:text-5xl font-bold text-white">
               Próximos eventos
@@ -87,7 +88,50 @@ export function EventGrid() {
               </Button>
             ))}
           </div>
-        </div>
+        </div> */}
+        {/* HEADER */}
+<div className="mb-6 space-y-2">
+  <h2 className="text-3xl md:text-5xl font-bold text-white">
+    Próximos eventos
+  </h2>
+  <p className="text-muted-foreground text-lg">
+    No te pierdas estas experiencias increíbles.
+  </p>
+</div>
+
+{/* CATEGORÍAS */}
+<div className="flex flex-wrap gap-2 mb-12">
+  <Button
+    variant={activeCategory === "All" ? "primary" : "outline"}
+    onClick={() => setActiveCategory("All")}
+    className={`rounded-full ${
+      activeCategory === "All"
+        ? ""
+        : "border-white/10 hover:bg-white/5 hover:text-white"
+    }`}
+  >
+    Todos
+  </Button>
+
+  {categories.map((category) => (
+    <Button
+      key={category.id}
+      variant={activeCategory === category.id ? "primary" : "outline"}
+      onClick={() => setActiveCategory(category.id)}
+      className={`rounded-full ${
+        activeCategory === category.id
+          ? ""
+          : "border-white/10 hover:bg-white/5 hover:text-white"
+      }`}
+    >
+      {category.name}
+    </Button>
+  ))}
+</div>
+
+
+
+
 
         {filteredEvents.length === 0 ? (
           <div className="rounded-2xl border border-white/10 bg-secondary/20 p-8 text-center text-muted-foreground">

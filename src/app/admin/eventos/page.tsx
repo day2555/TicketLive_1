@@ -27,7 +27,11 @@ export default function AdminEventosPage() {
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch(`${API_URL}/events`);
+      const response = await fetch(`${API_URL}/events?page=1&limit=1000`,
+      {
+        credentials: "include",
+      }
+    );
       const data = await response.json();
       setEvents(data);
     } catch (error) {

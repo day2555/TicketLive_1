@@ -33,6 +33,7 @@ export default function RootLayout({
       >
         <AuthProvider>
           <CartProvider>
+
             <FavoritesProvider>
               <TicketsProvider>
                 <Suspense fallback={null}>
@@ -40,10 +41,12 @@ export default function RootLayout({
                   {children}
                   <Footer />
                   <Toaster position="top-right" richColors />
-                  <ChatBot />
+                  {/* <ChatBot /> */}
                 </Suspense>
               </TicketsProvider>
             </FavoritesProvider>
+            <ChatBot />
+
           </CartProvider>
         </AuthProvider>
       </body>

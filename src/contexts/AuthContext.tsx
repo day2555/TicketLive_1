@@ -98,6 +98,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (savedUser) {
       setUser(savedUser);
     }
+    // TEMPORALMENTE COMENTADO: El backend no guarda los cambios correctamente
+    // Descomentar cuando el backend esté arreglado
+    // refreshUser();
     setIsLoading(false);
   }, []);
 

@@ -6,7 +6,7 @@ export interface ICategory {
 }
 
 export const getEvents = async (): Promise<IEvent[]> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events?page=1&limit=1000`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

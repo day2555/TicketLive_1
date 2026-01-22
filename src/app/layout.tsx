@@ -41,7 +41,6 @@ export default function RootLayout({
                   {children}
                   <Footer />
                   <Toaster position="top-right" richColors />
-                  {/* <ChatBot /> */}
                 </Suspense>
               </TicketsProvider>
             </FavoritesProvider>
